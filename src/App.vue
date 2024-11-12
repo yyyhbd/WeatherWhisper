@@ -21,7 +21,7 @@ export default {
         }
 
         this.error = ''; 
-
+        this.city = this.city.replace(/\s+/g, '');
         axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=733ad0147444577d6efd696cb7d20631`)
             .then(res => {
                     this.info = res.data; 
