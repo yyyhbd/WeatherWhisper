@@ -1,27 +1,25 @@
 <script>
 import axios from 'axios';
 import { computed } from 'vue';
+
 export default {
-  
   data() {
     return {
       city: '',
-      error:'',
-      info:null
-      
+      error: '',
+      info: null
     };
-   
   },
   methods: {
     getWeather() {
-        if (this.city.trim().length < 2) {
-            this.error = 'Нужно название более одного символа';
-            this.info = null; 
-            return false;
-        }
+      if (this.city.trim().length < 2) {
+        this.error = 'More than one character name is needed';
+        this.info = null;
+        return false;
+      }
 
         this.error = ''; 
-        this.city = this.city.replace(/\s+/g, '');
+
         axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=733ad0147444577d6efd696cb7d20631`)
             .then(res => {
                     this.info = res.data; 
@@ -34,42 +32,41 @@ export default {
             
     }
   },
-  computed:{
+  computed: {
     showTemp() {
-    return "Температура:" + this.info.main.temp.toFixed(0)
+      return "Temperature: " + this.info.main.temp.toFixed(0);
     },
     showFeelsLike() {
-    return "Ощущается как: " + this.info.main.feels_like.toFixed(0)
+      return "Feels like: " + this.info.main.feels_like.toFixed(0);
     },
     showMinTemp() {
-    return "Минимальная температура:" + this.info.main.temp_min.toFixed(0)
+      return "Minimum temperature: " + this.info.main.temp_min.toFixed(0);
     },
-    showMaxTemp(){
-    return "Максимальная температура: "+ this.info.main.temp_max.toFixed(0)
+    showMaxTemp() {
+      return "Maximum temperature: " + this.info.main.temp_max.toFixed(0);
+    }
   }
-}
 }
 </script>
 
 <template>
- <div className ="wrapper">
-    <h1>Погодное приложение </h1>
-    <p v-if="city">Узнать погоду в {{ city }}</p>
-    <p v-else>Узнать погоду в вашем городе</p>
-    <input type="text" @:input="city = $event.target.value" placeholder="Введите город">
-    <button v-if="city !=''" @click="getWeather(city)">Получить погоду</button>
-    <button disabled v-else id="myButton">Получить погоду</button>
-    <div v-if="info != null">
-      <p>{{showTemp}}°C</p>
-      <p>{{showFeelsLike}}°C</p>
-      <p>{{ showMinTemp}}°C</p>
+  <div class="wrapper">
+    <h1>Weather app</h1>
+    <p v-if="city">Check the weather in {{ city }}</p>
+    <p v-else>Find out the weather in your city</p>
+    <input type="text" @input="city = $event.target.value" placeholder="Enter city">
+    <button v-if="city !== ''" @click="getWeather(city)">Get weather</button>
+    <button disabled v-else id="myButton">Get weather</button>
+    <div v-if="info !== null">
+      <p>{{ showTemp }}°C</p>
+      <p>{{ showFeelsLike }}°C</p>
+      <p>{{ showMinTemp }}°C</p>
       <p>{{ showMaxTemp }}°C</p>
     </div>
     <div v-else>
-      <p className="error">{{ error }}</p>
+      <p class="error">{{ error }}</p>
     </div>
-    
- </div>
+  </div>
 </template>
 
 <style scoped>
